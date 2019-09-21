@@ -26,6 +26,7 @@ class RoutingTable:
         """
         self.name=name
         self.table={self.name:(0, self.name)}
+        self.local_time=0
     def getNodeNames(self):
         """
         Returns an alphabetized list of the known destination nodes.
@@ -51,7 +52,7 @@ class RoutingTable:
         """
         hop = self.table.get(destination)[0]
         link = self.table.get(destination)[1]
-        print("!!!!!", self.name, link)
+    
         # for node in self.table:
         #     if self.table.get(node) is not None and node != self.name:
         #         new_hop = self.table.get(node)[0]
