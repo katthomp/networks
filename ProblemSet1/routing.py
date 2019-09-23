@@ -26,7 +26,9 @@ class RoutingTable:
         """
         self.name=name
         self.table={self.name:(0, self.name)}
-        self.local_time=0
+        self.local_time = 0
+        self.update_table = {}
+        self.timeout = 10
     def getNodeNames(self):
         """
         Returns an alphabetized list of the known destination nodes.
@@ -38,6 +40,8 @@ class RoutingTable:
         Returns the hop count from this node to the destination node.
         """
         # You complete this implementation
+        # if self.name == 'HARV' and self.local_time >= 20:
+        #     return 0
         if destination == self.name:
             return 0
         elif self.table.get(destination) is not None:
@@ -50,16 +54,7 @@ class RoutingTable:
         """
         Returns the name of the first node on the path to destination.
         """
-        hop = self.table.get(destination)[0]
         link = self.table.get(destination)[1]
-    
-        # for node in self.table:
-        #     if self.table.get(node) is not None and node != self.name:
-        #         new_hop = self.table.get(node)[0]
-        #         new_link = self.table.get(node)[1]
-        #         if new_hop < hop:
-        #             hop = new_hop
-        #             link = new_link
         return link
                     
 
@@ -71,14 +66,24 @@ class RoutingTable:
         """
         for node in table.table:
             hop = table.table[node][0]+1
+            self.update_table[node] = self.local_time
             if node != self.name:
                 if node in self.table:
                     # link = self.table[node][1]
                     if hop <= self.table.get(node)[0]:
                         self.table[node] = (hop, source)
+                        self.update_table[node] = self.local_time
                 else:
                     # link=table.table[node][1]
                     self.table[node] = (hop, source)
+            #print("REG",self.local_time)
+            # i want it 
+            if self.update_table[source] <= self.local_time-self.timeout:
+                print(self.update_table[node])
+                print("DEL",self.local_time)
+                del self.update_table[source]
+                del self.table[source]
+        self.local_time+=1
 #need something to update the hop if it's better
 #need something to 
 

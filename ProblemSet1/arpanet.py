@@ -145,6 +145,8 @@ class ArpanetMonitor(GCompound):
 
     def update(self):
         node = self._node
+        for line in self._lines:
+            line.setLabel("")
         if node.isActive():
             self._label.setColor("Black")
         else:
@@ -162,8 +164,6 @@ class ArpanetMonitor(GCompound):
             if hopCount is not None:
                 text = destination + ":" + str(hopCount)
                 link = table.getBestLink(destination)
-                print("LINK",link)
-                print("NAME",name)
                 if link is not None and name != link:
                     text += "\u2192" + link
                 self._lines[index].setLabel(text)
